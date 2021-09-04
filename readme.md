@@ -1,7 +1,6 @@
 # FortNotes Server
 
 [![Build Status](https://img.shields.io/travis/fortnotes/api.svg?style=flat-square)](https://travis-ci.org/fortnotes/api)
-[![NPM version](https://img.shields.io/npm/v/fortnotes.svg?style=flat-square)](https://www.npmjs.com/package/fortnotes)
 [![Dependencies Status](https://img.shields.io/david/fortnotes/api.svg?style=flat-square)](https://david-dm.org/fortnotes/api)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-blue.svg?style=flat-square)](https://gitter.im/DarkPark/FortNotes)
 
@@ -19,32 +18,18 @@ Please follow the official [instruction](http://nodejs.org/download/).
 ...
 
 
-#### DBMS Support
+## DBMS Support
 
 - MySQL & MariaDB
 - PostgreSQL
 - SQLite
 
 
-#### Config file options
+## Environment variables
 
  Name                    | Description
 -------------------------|-------------
- debug                   | enable verbose debug mode
- test                    | run tests and exit
- port                    | HTTP port serving REST API requests
- dataSize                | maximum encrypted data size (notes, tags)
- hashSize                | notes/tags sha512 hash size
- dataLimit               | default amount of returned records in lists of notes, sessions etc.
- dataLimitMax            | maximum amount of returned records in lists
- sessionTokenSize        | generated token size in bytes
- sessionConfirmCodeSize  | generated token confirmation code size in bytes
- sessionConfirmAttempts  | allowed amount of attempts to activate sessions
- smtpTransport           | nodemailer SMTP transport [configuration](https://github.com/andris9/nodemailer-smtp-transport) (use direct if not set)
- mailOptions             | nodemailer e-mail message [fields](https://github.com/andris9/Nodemailer#e-mail-message-fields)
- restify                 | server creation options passed to [restify package](http://mcavage.me/node-restify/#creating-a-server)
- database                | database connection options passed to [node-orm2 package](https://github.com/dresende/node-orm2/wiki/Connecting-to-Database)
-
+ ...                     | ...
 
 
 ## Development ##
