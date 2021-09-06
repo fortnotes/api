@@ -64,6 +64,12 @@ It's possible to run all tests locally:
 npm test
 ```
 
+### Environment variables
+
+ Name                   | Description
+------------------------|-------------
+ FORTNOTES_API_ENDPOINT | GraphQL API endpoint to test
+
 ???
 Tests are also run on [Travis CI](https://travis-ci.org/fortnotes/server) for node versions `0.10.x`, `0.12.x` and `iojs`.
 
