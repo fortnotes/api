@@ -17,11 +17,11 @@ const sequelize = new Sequelize(/* 'sqlite::memory:', */ {
         : false
 });
 
-const generateErd = db => {
+const generateErd = ( db, app ) => {
     sequelizeErd({source: db, arrowSize: 1.5}).then(svg => writeFile(
         './erd.svg',
         svg,
-        () => console.log('sequelize: erd.svg is saved')
+        () => app.log.info('sequelize: erd.svg is saved')
     ));
 };
 
@@ -44,9 +44,9 @@ export default fastifyPlugin(async app => {
 
     try {
         await sequelize.authenticate();
-        console.log('sequelize: connection has been established successfully');
+        app.log.info('sequelize: connection has been established successfully');
     } catch ( error ) {
-        console.error('sequelize: unable to connect to the database!', error);
+        app.log.error(error, 'sequelize: unable to connect to the database!');
     }
 
     const {models} = sequelize;
@@ -90,7 +90,7 @@ export default fastifyPlugin(async app => {
     models.note.hasMany(models.noteRevision);
     models.noteRevision.belongsTo(models.note);
 
-    generateErd(sequelize);
+    generateErd(sequelize, app);
 
     await sequelize.sync({force: forceSync});
 
