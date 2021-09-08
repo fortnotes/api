@@ -27,9 +27,9 @@ Please follow the official [instruction](http://nodejs.org/download/).
 
 ## Environment variables
 
- Name                    | Description
--------------------------|-------------
- ...                     | ...
+ Name                    | Default | Description
+-------------------------|---------|-------------
+ FORTNOTES_LOG_LEVEL     | false   | verbosity level based on the [pino library](https://github.com/pinojs/pino/blob/master/docs/api.md) (levels: `fatal`, `error`, `warn`, `info`, `debug`, `trace`, `silent`)
 
 
 ## Development ##

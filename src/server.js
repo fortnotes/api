@@ -13,14 +13,18 @@ let apolloServer;
 const start = async () => {
     app = fastify({
         trustProxy: true,
-        logger: {
-            base: null,
-            prettyPrint: {
-                translateTime: 'SYS:yyyy-mm-dd HH:MM:ss'
-            },
-            level: config.logLevel
-        }
+        logger: config.logLevel
+            ? {
+                base: null,
+                prettyPrint: {
+                    translateTime: 'SYS:yyyy-mm-dd HH:MM:ss'
+                },
+                level: config.logLevel
+            }
+            : false
     });
+
+    app.log.debug(config, 'config');
 
     const prepareContext = async ( {request, reply} ) => {
         //console.log(reply.header);

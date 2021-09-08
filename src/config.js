@@ -7,7 +7,7 @@ const jwtSecretSize = Number(env.FORTNOTES_JWT_SECRET_SIZE) || 64;
 
 
 export default {
-    logLevel: env.FORTNOTES_LOG_LEVEL || 'info',
+    logLevel: env.FORTNOTES_LOG_LEVEL || false,
 
     // HTTP server options
     httpHost: env.FORTNOTES_HTTP_HOST || '0.0.0.0',
