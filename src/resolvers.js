@@ -78,7 +78,7 @@ export default {
         },
 
         notes: ( parent, args, {db, user} ) => {
-            console.log(user);
+            //console.log(user);
 
             if ( !user ) {
                 throw new AuthRequiredError();

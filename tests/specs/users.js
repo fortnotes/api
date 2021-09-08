@@ -1,7 +1,5 @@
-import chai from 'chai';
 import createRequest from '../utils/createRequest.js';
 
-const {expect} = chai;
 
 const getLoginMutation = variables => ({
     data: {
@@ -50,42 +48,44 @@ describe('users', () => {
         it('login with empty credentials - should fail', async () => {
             const response = await requests.anonymous.call(getLoginMutation({email: '', password: ''}));
 
-            expect(requests.anonymous.cookies).to.be.empty;
-            expect(response.data.errors[0].extensions.code).to.equal('INTERNAL_SERVER_ERROR');
+            expect(requests.anonymous.cookies).toEqual({});
+            expect(response.data.errors[0].extensions.code).toEqual('INTERNAL_SERVER_ERROR');
         });
 
         it('login with wrong credentials - should fail', async () => {
             const response = await requests.anonymous.call(getLoginMutation({email: 'wrong', password: 'wrong'}));
 
-            expect(requests.anonymous.cookies).to.be.empty;
-            expect(response.data.errors[0].extensions.code).to.equal('INTERNAL_SERVER_ERROR');
+            expect(requests.anonymous.cookies).toEqual({});
+            expect(response.data.errors[0].extensions.code).toEqual('INTERNAL_SERVER_ERROR');
         });
 
         it('login admin with good credentials - should pass', async () => {
             const response = await requests.admin.call(getLoginMutation({email: 'test@test.com', password: 'test'}));
 
-            expect(requests.admin.cookies).to.have.all.keys('accessToken', 'refreshToken');
-            expect(requests.admin.cookies.accessToken.httpOnly).to.be.true;
-            expect(requests.admin.cookies.refreshToken.httpOnly).to.be.true;
-            expect(response.data).to.not.have.property('errors');
-            expect(response.data.data.login).to.have.property('id');
+            expect(requests.admin.cookies).toHaveProperty('accessToken');
+            expect(requests.admin.cookies).toHaveProperty('refreshToken');
+            expect(requests.admin.cookies.accessToken.httpOnly).toBe(true);
+            expect(requests.admin.cookies.refreshToken.httpOnly).toBe(true);
+            expect(response.data).not.toHaveProperty('errors');
+            expect(response.data.data.login).toHaveProperty('id');
         });
 
         // todo: setup correct user
         it.skip('login user with good credentials - should pass', async () => {
             const response = await requests.user.call(getLoginMutation({email: 'test2@test.com', password: 'test2'}));
 
-            console.log(response.data);
-            expect(response.data).to.not.have.property('errors');
-            expect(response.data.data.login).to.have.property('id');
+            //console.log(response.data);
+            expect(response.data).not.toHaveProperty('errors');
+            expect(response.data.data.login).toHaveProperty('id');
         });
 
         it('get admin notes - should pass', async () => {
             //setTimeout(async () => {
             const response = await requests.admin.call(getNotesQuery());
 
-            expect(response.data).to.not.have.property('errors');
-            expect(response.data.data.notes).to.be.an('array').to.have.lengthOf(4);
+            expect(response.data).not.toHaveProperty('errors');
+            expect(response.data.data.notes).toBeInstanceOf(Array);
+            expect(response.data.data.notes.length).toBe(4);
             //}, 1000);
         });
 
@@ -93,8 +93,9 @@ describe('users', () => {
         it.skip('get user notes - should pass', async () => {
             const response = await requests.user.call(getNotesQuery());
 
-            expect(response.data).to.not.have.property('errors');
-            expect(response.data.data.notes).to.be.an('array').to.have.lengthOf(4);
+            expect(response.data).not.toHaveProperty('errors');
+            expect(response.data.data.notes).toBeInstanceOf(Array);
+            expect(response.data.data.notes.length).toBe(4);
         });
     });
 
@@ -104,8 +105,8 @@ describe('users', () => {
 
             //console.log(response.headers);
             //console.log(response.data.data.login);
-            expect(response.data).to.not.have.property('errors');
-            expect(response.data.data.login).to.have.property('id');
+            expect(response.data).not.toHaveProperty('errors');
+            expect(response.data.data.login).toHaveProperty('id');
         });
     });/**/
 });

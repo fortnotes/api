@@ -3,11 +3,11 @@ import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import cookieParser from 'set-cookie-parser';
 
-import config from '../config.js';
+import server from '../../src/server.js';
 
 
 const defaultOptions = {
-    baseURL: config.apiEndpoint,
+    baseURL: `http://localhost:${server.config.httpPort}/graphql`,
     method: 'post',
     headers: {
         Accept: 'application/json',
