@@ -1,11 +1,11 @@
 module.exports = {
     'extends': [
         require.resolve('../.eslintrc.cjs'),
-        //'plugin:chai-friendly/recommended',
-        //'plugin:cypress/recommended'
+
+        // https://github.com/jest-community/eslint-plugin-jest
+        'plugin:jest/all'
     ],
     env: {
-        //es6: true,
         jest: true
     },
 
@@ -14,6 +14,8 @@ module.exports = {
         'no-shadow': ['error', {allow: ['done']}],
         'max-lines-per-function': ['error', {max: 300}],
         'no-unused-expressions': ['off'],
-        'strict': ['off']
+        'strict': ['off'],
+
+        'jest/prefer-expect-assertions': ['off']
     }
 };

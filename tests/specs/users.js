@@ -48,15 +48,15 @@ describe('users', () => {
         it('login with empty credentials - should fail', async () => {
             const response = await requests.anonymous.call(getLoginMutation({email: '', password: ''}));
 
-            expect(requests.anonymous.cookies).toEqual({});
-            expect(response.data.errors[0].extensions.code).toEqual('INTERNAL_SERVER_ERROR');
+            expect(requests.anonymous.cookies).toStrictEqual({});
+            expect(response.data.errors[0].extensions.code).toStrictEqual('INTERNAL_SERVER_ERROR');
         });
 
         it('login with wrong credentials - should fail', async () => {
             const response = await requests.anonymous.call(getLoginMutation({email: 'wrong', password: 'wrong'}));
 
-            expect(requests.anonymous.cookies).toEqual({});
-            expect(response.data.errors[0].extensions.code).toEqual('INTERNAL_SERVER_ERROR');
+            expect(requests.anonymous.cookies).toStrictEqual({});
+            expect(response.data.errors[0].extensions.code).toStrictEqual('INTERNAL_SERVER_ERROR');
         });
 
         it('login admin with good credentials - should pass', async () => {
@@ -85,7 +85,7 @@ describe('users', () => {
 
             expect(response.data).not.toHaveProperty('errors');
             expect(response.data.data.notes).toBeInstanceOf(Array);
-            expect(response.data.data.notes.length).toBe(4);
+            expect(response.data.data.notes).toHaveLength(4);
             //}, 1000);
         });
 
@@ -95,7 +95,7 @@ describe('users', () => {
 
             expect(response.data).not.toHaveProperty('errors');
             expect(response.data.data.notes).toBeInstanceOf(Array);
-            expect(response.data.data.notes.length).toBe(4);
+            expect(response.data.data.notes).toHaveLength(4);
         });
     });
 
