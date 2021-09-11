@@ -39,7 +39,7 @@ const getDetails = request => ({
 
 const setAccessToken = ( response, user ) => {
     const token = app.jwt.sign(user, {
-        expiresIn: config.jwtAccessTokenExpireTime,
+        expiresIn: config.jwt.accessTokenExpireTime,
         algorithm: 'HS512'
     });
 
@@ -47,7 +47,7 @@ const setAccessToken = ( response, user ) => {
         path: cookiePath,
         httpOnly: true,
         sameSite: true,
-        maxAge: config.jwtAccessTokenExpireTime
+        maxAge: config.jwt.accessTokenExpireTime
     });
 };
 
@@ -58,7 +58,7 @@ const setRefreshToken = ( response, token ) => {
             path: cookiePath,
             httpOnly: true,
             sameSite: true,
-            maxAge: config.jwtRefreshTokenExpireTime
+            maxAge: config.jwt.refreshTokenExpireTime
         })
     );
 };

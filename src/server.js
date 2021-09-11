@@ -58,6 +58,7 @@ const start = async () => {
     };
 
     apolloServer = new ApolloServer({
+        debug: !!config.logLevel,
         typeDefs,
         resolvers,
         context: prepareContext

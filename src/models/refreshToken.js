@@ -5,8 +5,8 @@ import config from '../config.js';
 
 
 const generateTokenData = () => ({
-    expireAt: new Date(Date.now() + config.jwtRefreshTokenExpireTime * 1000),
-    data: crypto.randomBytes(config.jwtRefreshTokenSize).toString('base64')
+    expireAt: new Date(Date.now() + config.jwt.refreshTokenExpireTime * 1000),
+    data: crypto.randomBytes(config.jwt.refreshTokenSize).toString('base64')
 });
 
 

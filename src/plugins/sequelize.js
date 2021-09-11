@@ -4,18 +4,11 @@ import fastifyPlugin from 'fastify-plugin';
 import {writeFile} from 'fs';
 import sequelizeErd from 'sequelize-erd';
 
+import config from '../config.js';
+
 const forceSync = true;
 
-const sequelize = new Sequelize(/* 'sqlite::memory:', */ {
-    dialect: 'sqlite',
-    storage: './database.sqlite',
-    /* host: config.host,
-    port: config.port,
-    dialect: 'postgres', */
-    logging: ['debug', 'trace'].includes(process.env.FORTNOTES_LOG_LEVEL)
-        ? queryString => console.log(queryString)
-        : false
-});
+const sequelize = new Sequelize(config.db);
 
 const generateErd = ( db, app ) => {
     sequelizeErd({source: db, arrowSize: 1.5}).then(svg => writeFile(
