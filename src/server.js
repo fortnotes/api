@@ -4,8 +4,9 @@ import {ApolloServer} from 'apollo-server-fastify';
 import DataLoader from 'dataloader';
 
 import config from './config.js';
-import typeDefs from './schema.js';
-import resolvers from './resolvers.js';
+// import typeDefs from './schema.js';
+// import resolvers from './resolvers.js';
+import {typeDefs, resolvers} from './schema/index.js';
 
 let app;
 let apolloServer;
@@ -74,11 +75,10 @@ const start = async () => {
     if ( config.logLevel ) {
         app.log.debug(config, 'config');
 
-        app.addHook('preHandler', (request, reply, done) => {
+        app.addHook('preHandler', async request => {
             if ( request.body ) {
                 request.log.info({body: request.body}, 'parsed body');
             }
-            done();
         });
     }
 
