@@ -4,22 +4,6 @@ export default gql`
     # Types
 
     type Mutation {
-        # login (
-        #     email: String!
-        #     password: String!
-        # ): User!
-
-        # createUser (
-        #     email: String!
-        #     password: String!
-        #     #aesKey: AesKey!
-        # ): User!
-
-        # createNote (
-        #     text: String
-        #     #code: Code!
-        # ): Note!
-
         login ( input: LoginInput! ): User!
 
         logout: LogoutPayload!
