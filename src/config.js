@@ -5,7 +5,11 @@ const {env} = process;
 
 const envPrefix = 'FORTNOTES_';
 
-const getEnv = ( name, defaultValue, cast = String ) => cast(env[`${envPrefix}${name}`]) || defaultValue;
+const getEnv = ( name, defaultValue, cast = String ) => {
+    const variable = env[`${envPrefix}${name}`];
+
+    return variable ? cast(variable) : defaultValue;
+};
 
 const prepareVars = ( prefix, varNames ) => {
     const result = {};
