@@ -1,6 +1,4 @@
-import apollo from 'apollo-server-fastify';
-
-const {gql} = apollo;
+import {gql} from 'apollo-server-fastify';
 
 export default gql`
     # Inputs
