@@ -19,12 +19,26 @@ const start = async () => {
                 prettyPrint: {
                     translateTime: 'SYS:yyyy-mm-dd HH:MM:ss'
                 },
-                level: config.logLevel
+                level: config.logLevel,
+                serializers: {
+                    res ( reply ) {
+                        return {
+                            statusCode: reply.statusCode
+                        };
+                    },
+                    req ( request ) {
+                        return {
+                            //method: request.method,
+                            //url: request.url,
+                            //path: request.path,
+                            parameters: request.parameters,
+                            cookie: request.headers.cookie
+                        };
+                    }
+                }
             }
             : false
     });
-
-    app.log.debug(config, 'config');
 
     const prepareContext = async ( {request, reply} ) => {
         //console.log(reply.header);
@@ -56,6 +70,17 @@ const start = async () => {
             }
         };
     };
+
+    if ( config.logLevel ) {
+        app.log.debug(config, 'config');
+
+        app.addHook('preHandler', (request, reply, done) => {
+            if ( request.body ) {
+                request.log.info({body: request.body}, 'parsed body');
+            }
+            done();
+        });
+    }
 
     apolloServer = new ApolloServer({
         debug: !!config.logLevel,
