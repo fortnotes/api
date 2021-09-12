@@ -4,8 +4,9 @@ import {ApolloServer} from 'apollo-server-fastify';
 import DataLoader from 'dataloader';
 
 import config from './config.js';
-import typeDefs from './schema.js';
-import resolvers from './resolvers.js';
+// import typeDefs from './schema.js';
+// import resolvers from './resolvers.js';
+import {typeDefs, resolvers} from './schema/index.js';
 
 let app;
 let apolloServer;
