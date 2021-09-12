@@ -20,7 +20,8 @@ module.exports = {
         'no-multiple-empty-lines': ['error', {max: 2, maxEOF: 0, maxBOF: 0}],
         'space-before-function-paren': ['error', {anonymous: 'always', named: 'always'}],
         'no-unused-expressions': ['error', {allowShortCircuit: true}],
-        'import/extensions': ['warn', 'ignorePackages']
+        'import/extensions': ['warn', 'ignorePackages'],
+        'max-len': ['warn', {code: 120}]
         //'require-await': 0
     }
 };

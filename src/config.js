@@ -3,68 +3,81 @@ import crypto from 'crypto';
 
 const {env} = process;
 
-//var path = require('path');
+const envPrefix = 'FORTNOTES_';
+
+const getEnv = ( name, defaultValue, cast = String ) => cast(env[`${envPrefix}${name}`]) || defaultValue;
+
+const prepareVars = ( prefix, varNames ) => {
+    const result = {};
+
+    varNames.forEach(varName => {
+        const varValue = env[`${envPrefix}${prefix.toUpperCase()}_${varName.toUpperCase()}`];
+
+        if ( varValue !== undefined && varValue !== '' ) {
+            result[varName] = varValue;
+        }
+    });
+
+    return result;
+};
+
+const jwtSecretSize = getEnv('JWT_SECRET_SIZE', 64, Number);
+const logLevel = getEnv('LOG_LEVEL', false);
 
 
 export default {
-    // enable verbose debug mode
-    //debug: false,
-    logLevel: env.FORTNOTES_LOG_LEVEL || 'info',
-
-    // run tests and exit
-    //test: false,
+    logLevel,
 
     // HTTP server options
-    httpHost: env.FORTNOTES_HTTP_HOST || '0.0.0.0',
-    httpPort: env.FORTNOTES_HTTP_PORT || 4000,
+    httpHost: getEnv('HTTP_HOST', '0.0.0.0'),
+    httpPort: getEnv('HTTP_PORT', 4000, Number),
 
-    jwtSecret: env.FORTNOTES_JWT_SECRET
-        || crypto.randomBytes(64).toString(),
-    jwtAccessTokenExpireTime: Number(env.FORTNOTES_JWT_ACCESS_TOKEN_EXPIRE_TIME)
-        || 10 * 60,
-    jwtRefreshTokenExpireTime: Number(env.FORTNOTES_JWT_REFRESH_TOKEN_EXPIRE_TIME)
-        || 30 * 24 * 60 * 60,
-    jwtRefreshTokenSize: Number(env.FORTNOTES_JWT_REFRESH_TOKEN_SIZE)
-        || 96,
+    jwt: {
+        secretSize: jwtSecretSize,
+        secret: getEnv(
+            'JWT_SECRET',
+            crypto.randomBytes(jwtSecretSize).toString('base64')
+        ),
+        accessTokenExpireTime: getEnv(
+            'JWT_ACCESS_TOKEN_EXPIRE_TIME',
+            10 * 60, // 10 minutes
+            Number
+        ),
+        refreshTokenExpireTime: getEnv(
+            'JWT_REFRESH_TOKEN_EXPIRE_TIME',
+            30 * 24 * 60 * 60, // 30 days
+            Number
+        ),
+        refreshTokenSize: getEnv('JWT_REFRESH_TOKEN_SIZE', 96, Number)
+    },
 
+    // https://sequelize.org/master/class/lib/sequelize.js~Sequelize.html
+    db: {
+        dialect: getEnv('DB_DIALECT', 'sqlite'),
+        storage: getEnv('DB_STORAGE', './db.sqlite'),
+        ...(() => {
+            if ( ['debug', 'trace'].includes(logLevel) ) {
+                return {
+                    logging: ( query, time ) => console.log(`${time}\t${query}`),
+                    benchmark: true
+                };
+            }
 
-    // maximum encrypted data size (notes, tags, etc.)
-    // 1Mb
-    dataSize: 1048576,
-
-    // notes/tags sha512 hash size
-    hashSize: 128,
-
-    // default amount of returned records in lists of notes, sessions, etc.
-    dataLimit: 20,
-
-    // maximum amount of returned records in lists
-    dataLimitMax: 200,
-
-    // generated token size in bytes
-    sessionTokenSize: 96,
-
-    // generated token confirmation code size in bytes
-    sessionConfirmCodeSize: 12,
-
-    // allowed amount of attempts to activate sessions
-    sessionConfirmAttempts: 3,
-
-    // nodemailer SMTP transport configuration (use direct if not set)
-    // https://github.com/andris9/nodemailer-smtp-transport
-    smtpTransport: null,
-
-    // nodemailer e-mail message fields
-    // https://github.com/andris9/Nodemailer#e-mail-message-fields
-    mailOptions: {
-        from: 'admin@fortnotes.com',
-        subject: 'FortNotes Server notification'
+            return {
+                logging: false
+            };
+        })(),
+        ...prepareVars('DB', [
+            'database',
+            'username',
+            'password',
+            'host',
+            'port'
+        ]),
+        pool: prepareVars('DB_POOL', [
+            'min',
+            'max',
+            'idle'
+        ])
     }
-
-    // database connection options passed to node-orm2 package
-    // https://github.com/dresende/node-orm2/wiki/Connecting-to-Database
-    /* database: {
-        protocol: 'sqlite',
-        pathname: path.join(__dirname, 'data.sqlite')
-    } */
 };

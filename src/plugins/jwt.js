@@ -11,7 +11,7 @@ const cookiePath = '/graphql';
 export default fastifyPlugin(async app => {
     const setAccessToken = ( reply, user ) => {
         const token = app.jwt.sign(user, {
-            expiresIn: config.jwtAccessTokenExpireTime,
+            expiresIn: config.jwt.accessTokenExpireTime,
             algorithm: 'HS512'
         });
 
@@ -19,7 +19,7 @@ export default fastifyPlugin(async app => {
             path: cookiePath,
             httpOnly: true,
             sameSite: true,
-            maxAge: config.jwtAccessTokenExpireTime
+            maxAge: config.jwt.accessTokenExpireTime
         });
     };
 
@@ -28,7 +28,7 @@ export default fastifyPlugin(async app => {
             path: cookiePath,
             httpOnly: true,
             sameSite: true,
-            maxAge: config.jwtRefreshTokenExpireTime
+            maxAge: config.jwt.refreshTokenExpireTime
         });
     };
 
@@ -38,7 +38,7 @@ export default fastifyPlugin(async app => {
     });
 
     app.register(fastifyJwt, {
-        secret: config.jwtSecret,
+        secret: config.jwt.secret,
         cookie: {
             cookieName: 'accessToken'
         }
