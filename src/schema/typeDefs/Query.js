@@ -1,5 +1,7 @@
 import {gql} from 'apollo-server-fastify';
 
+const DEFAULT_PAGINATION_LIMIT = 20;
+
 export default gql`
     # Types
 
@@ -11,33 +13,33 @@ export default gql`
         user ( id: ID! ): User!
 
         users (
-            sort: UsersSort
+            sort: Sort
             offset: Int = 0
-            limit: Int = 10
+            limit: Int = ${DEFAULT_PAGINATION_LIMIT}
         ): Users!
 
         code ( id: ID! ): Code!
 
         codes (
             offset: Int = 0
-            limit: Int = 10
+            limit: Int = ${DEFAULT_PAGINATION_LIMIT}
         ): Codes!
 
         note ( id: ID! ): Note!
 
         notes (
             filter: NotesFilter
-            sort: NotesSort
+            sort: Sort
             offset: Int = 0
-            limit: Int = 10
+            limit: Int = ${DEFAULT_PAGINATION_LIMIT}
         ): Notes!
 
         tag ( id: ID! ): Tag!
 
         tags (
-            sort: TagsSort
+            sort: Sort
             offset: Int = 0
-            limit: Int = 10
+            limit: Int = ${DEFAULT_PAGINATION_LIMIT}
         ): Tags!
     }
 `;

@@ -42,17 +42,4 @@ export default gql`
     input UpdateUserInput {
         email: String
     }
-
-    input UsersSort {
-        field: UsersSortField!
-        direction: SortDirection! = ASC
-    }
-
-
-    # Enums
-
-    enum UsersSortField {
-        CREATED_AT
-        UPDATED_AT
-    }
 `;

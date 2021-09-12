@@ -28,17 +28,4 @@ export default gql`
     input TagInput {
         code: CodeInput!
     }
-
-    input TagsSort {
-        field: TagsSortField!
-        direction: SortDirection! = ASC
-    }
-
-
-    # Enums
-
-    enum TagsSortField {
-        CREATED_AT
-        UPDATED_AT
-    }
 `;

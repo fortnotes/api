@@ -75,11 +75,10 @@ const start = async () => {
     if ( config.logLevel ) {
         app.log.debug(config, 'config');
 
-        app.addHook('preHandler', (request, reply, done) => {
+        app.addHook('preHandler', async request => {
             if ( request.body ) {
                 request.log.info({body: request.body}, 'parsed body');
             }
-            done();
         });
     }
 

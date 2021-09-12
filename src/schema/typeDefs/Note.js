@@ -38,17 +38,4 @@ export default gql`
     input NotesFilter {
         tags: [ID!]!
     }
-
-    input NotesSort {
-        field: NotesSortField!
-        direction: SortDirection! = ASC
-    }
-
-
-    # Enums
-
-    enum NotesSortField {
-        CREATED_AT
-        UPDATED_AT
-    }
 `;
