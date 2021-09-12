@@ -21,6 +21,10 @@ export default gql`
         nodes: [Code!]!
     }
 
+    type DeleteCodePayload {
+        status: Boolean!
+    }
+
 
     # Inputs
 

@@ -18,6 +18,8 @@ export default gql`
 
         updateCode ( id: ID! input: CodeInput! ): Code!
 
+        deleteCode ( id: ID! ): DeleteCodePayload!
+
         createNote ( input: CreateNoteInput! ): Note!
 
         updateNote ( id: ID! input: UpdateNoteInput! ): Note!
