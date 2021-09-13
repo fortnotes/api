@@ -13,7 +13,9 @@ let apolloServer;
 
 const start = async () => {
     app = fastify({
-        trustProxy: true,
+        // https://www.fastify.io/docs/latest/Server/#trustproxy
+        trustProxy: config.httpTrustProxy,
+        // https://www.fastify.io/docs/latest/Server/#logger
         logger: config.logLevel
             ? {
                 base: null,
@@ -38,7 +40,9 @@ const start = async () => {
                     }
                 }
             }
-            : false
+            : false,
+        // https://www.fastify.io/docs/latest/Server/#bodylimit
+        bodyLimit: config.httpBodyLimit
     });
 
     const prepareContext = async ( {request, reply} ) => {
@@ -73,8 +77,6 @@ const start = async () => {
     };
 
     if ( config.logLevel ) {
-        app.log.debug(config, 'config');
-
         app.addHook('preHandler', async request => {
             if ( request.body ) {
                 request.log.info({body: request.body}, 'parsed body');
@@ -89,18 +91,26 @@ const start = async () => {
         context: prepareContext
     });
 
-    //(async function start () {
     await apolloServer.start();
 
     await app.register(fastifyCookie);
-    await app.register(apolloServer.createHandler());
+    await app.register(apolloServer.createHandler({
+        path: config.graphql.path,
+        cors: config.graphql.cors,
+        disableHealthCheck: !config.graphql.healthCheck
+    }));
     await app.register(import('./plugins/jwt.js'));
     await app.register(import('./plugins/sequelize.js'));
 
     //await sequelize.init();
 
-    app.listen(config.httpPort, config.httpHost);
-    //}());
+    await app.listen(config.httpPort, config.httpHost);
+
+    // in case of 0 in config (port will be a first available random number)
+    // return back this value to config
+    config.httpPort = app.server.address().port;
+
+    app.log.debug(config, 'config');
 };
 
 const stop = async () => {
