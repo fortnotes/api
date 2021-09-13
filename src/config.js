@@ -11,6 +11,19 @@ const getEnv = ( name, defaultValue, cast = String ) => {
     return variable ? cast(variable) : defaultValue;
 };
 
+// convert string to boolean
+const booleanHandler = value => {
+    const lcValue = value.toLowerCase();
+
+    if ( !['true', 'false'].includes(lcValue) ) {
+        throw new Error(
+            `Boolean environment variables should have one of these values: "true" or "false", but got "${lcValue}"`
+        );
+    }
+
+    return lcValue === 'true';
+};
+
 const prepareVars = ( prefix, varNames ) => {
     const result = {};
 
@@ -32,9 +45,18 @@ const logLevel = getEnv('LOG_LEVEL', false);
 export default {
     logLevel,
 
-    // HTTP server options
+    // https://www.fastify.io/docs/latest/Server/
     httpHost: getEnv('HTTP_HOST', '0.0.0.0'),
     httpPort: getEnv('HTTP_PORT', 4000, Number),
+    httpBodyLimit: getEnv('HTTP_BODY_LIMIT', 8 * 1024 * 1024, Number), // 8 MiB
+    httpTrustProxy: getEnv('HTTP_TRUST_PROXY', false, booleanHandler),
+
+    // https://www.apollographql.com/docs/apollo-server/api/apollo-server/#options-1
+    graphql: {
+        path: getEnv('GRAPHQL_PATH', '/graphql'),
+        cors: getEnv('GRAPHQL_CORS', false, booleanHandler),
+        healthCheck: getEnv('GRAPHQL_HEALTH_CHECK', true, booleanHandler)
+    },
 
     jwt: {
         secretSize: jwtSecretSize,

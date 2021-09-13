@@ -7,7 +7,7 @@ import server from '../../src/server.js';
 
 
 const defaultOptions = {
-    baseURL: `http://localhost:${server.config.httpPort}/graphql`,
+    baseURL: `http://localhost:${server.config.httpPort}${server.config.graphql.path}`,
     method: 'post',
     headers: {
         Accept: 'application/json',

@@ -31,6 +31,13 @@ Please follow the official [instruction](http://nodejs.org/download/).
  Name                                    | Default          | Description
 -----------------------------------------|------------------|-------------
  FORTNOTES_LOG_LEVEL                     | `false`          | verbosity level based on the [pino library](https://github.com/pinojs/pino/blob/master/docs/api.md) (levels: `fatal`, `error`, `warn`, `info`, `debug`, `trace`, `silent`)
+ FORTNOTES_HTTP_HOST                     | `0.0.0.0`        | interface to accept incoming connections
+ FORTNOTES_HTTP_PORT                     | `4000`           | the port to accept incoming connections (if set to `0` a first available random port will be taken)
+ FORTNOTES_HTTP_BODY_LIMIT               | 8 MiB            | defines the maximum payload (in bytes) the server is allowed to accept
+ FORTNOTES_HTTP_TRUST_PROXY              | `false`          | if enabled the server will have knowledge that it's sitting behind a proxy and that the `X-Forwarded-*` header fields may be trusted, which otherwise may be easily spoofed
+ FORTNOTES_GRAPHQL_PATH                  | `/graphql`       | the path for GraphQL server to listen on (main entry point)
+ FORTNOTES_GRAPHQL_CORS                  | `false`          | cross-origin resource sharing activation
+ FORTNOTES_GRAPHQL_HEALTH_CHECK          | `true`           | additional path `/.well-known/apollo/server-health` to determine if a server is available and ready to start serving traffic
  FORTNOTES_JWT_SECRET_SIZE               | `64`             | size (in bytes) used for random jwt secret generation
  FORTNOTES_JWT_SECRET                    | random string    | if not provided will be randomly generated
  FORTNOTES_JWT_ACCESS_TOKEN_EXPIRE_TIME  | 10 minutes       | access token lifetime (in seconds)
