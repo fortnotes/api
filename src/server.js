@@ -97,7 +97,7 @@ const start = async () => {
     await app.register(apolloServer.createHandler({
         path: config.graphql.path,
         cors: config.graphql.cors,
-        // todo: improve check handler
+        // todo: improve check handler (include DB check)
         disableHealthCheck: !config.graphql.healthCheck
     }));
     await app.register(import('./plugins/jwt.js'));
