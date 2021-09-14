@@ -18,22 +18,24 @@ const generateErd = ( db, app ) => {
     ));
 };
 
-//console.log(await import('./models/note.js'));
-//const Note = import('./models/note.js')(sequelize);
-//import('./models/note.js').then(({default: model}) => model(sequelize));
-//Note(sequelize);
-//console.log(Note(sequelize));
 
 export default fastifyPlugin(async app => {
-    (await import('../models/aesKey.js')).default(sequelize);
-    (await import('../models/code.js')).default(sequelize);
-    (await import('../models/ecKey.js')).default(sequelize);
-    (await import('../models/note.js')).default(sequelize);
-    (await import('../models/noteRevision.js')).default(sequelize);
-    (await import('../models/noteTag.js')).default(sequelize);
-    (await import('../models/refreshToken.js')).default(sequelize);
-    (await import('../models/tag.js')).default(sequelize);
-    (await import('../models/user.js')).default(sequelize);
+    const modelNames = [
+        'aesKey',
+        'code',
+        'ecKey',
+        'note',
+        'noteRevision',
+        'noteTag',
+        'refreshToken',
+        'tag',
+        'user'
+    ];
+
+    await Promise.all(modelNames.map(async name => {
+        const model = await import(`../models/${name}.js`);
+        model.default(sequelize);
+    }));
 
     try {
         await sequelize.authenticate();
@@ -44,44 +46,22 @@ export default fastifyPlugin(async app => {
 
     const {models} = sequelize;
 
+    models.aesKey.hasMany(models.code);
+    models.user.hasMany(models.code);
+    models.user.hasMany(models.aesKey);
+    models.user.hasMany(models.ecKey);
     models.user.hasMany(models.note);
-    models.user.hasMany(models.tag);
     models.user.hasMany(models.refreshToken);
+    models.user.hasMany(models.tag);
 
-    models.note.belongsTo(models.user);
-    models.tag.belongsTo(models.user);
-    models.note.belongsToMany(models.tag, {through: models.noteTag});
-    models.tag.belongsToMany(models.note, {through: models.noteTag});
-    models.refreshToken.belongsTo(models.user);
-
-    models.user.belongsTo(models.aesKey);
-    models.user.belongsTo(models.ecKey);
-    models.aesKey.hasOne(models.user);
-    models.ecKey.hasOne(models.user);
-
-    //models.code.belongsTo(models.note, {constraints: false});
-    //models.code.belongsTo(models.noteRevision, {constraints: false});
-    //models.code.belongsTo(models.aesKey, {constraints: false});
-    //models.code.belongsTo(models.tag, {constraints: false});
-    //models.tag.hasOne(models.code/* , {constraints: false} */);
-    //models.aesKey.hasOne(models.code, {constraints: false});
-    //models.note.hasOne(models.code);
-    //models.noteRevision.hasOne(models.code);
-
-    models.code.hasOne(models.tag);
-    models.code.hasOne(models.note);
-    models.code.hasOne(models.noteRevision);
-    models.code.hasOne(models.ecKey);
-    models.code.hasOne(models.aesKey);
-
-    models.tag.belongsTo(models.code);
-    models.note.belongsTo(models.code);
-    models.noteRevision.belongsTo(models.code);
-    models.ecKey.belongsTo(models.code);
-    models.aesKey.belongsTo(models.code);
+    models.code.hasOne(models.note, {constraints: false});
+    models.code.hasOne(models.tag, {constraints: false});
+    models.code.hasOne(models.ecKey, {constraints: false});
+    models.code.hasOne(models.noteRevision, {constraints: false});
 
     models.note.hasMany(models.noteRevision);
-    models.noteRevision.belongsTo(models.note);
+    models.note.belongsToMany(models.tag, {through: models.noteTag});
+    models.tag.belongsToMany(models.note, {through: models.noteTag});
 
     generateErd(sequelize, app);
 
@@ -90,22 +70,70 @@ export default fastifyPlugin(async app => {
     app.decorate('db', sequelize);
 
 
-    const c1 = await models.code.create({iv: 'iyh7zPoLqM3wA0Cm', em: '8I54aQvyNJ2zkFTdVauHeq/lAIkLxwqzv9IcnpQeadiEbpxmHHKwNAZzCF/s/yqT'});
-    const k1 = await models.aesKey.create({iterations: 2304427, salt: 'SKBgR4j28GQdJ5vojaA9MQ', codeId: 1});
-    const u1 = await models.user.create({email: 'test@test.com', password: 'test', aesKeyId: 1});
-    const u2 = await models.user.create({email: 'test2@test.com', password: 'test2'});
-    const c2 = await models.code.create({iv: 'd2', em: 'd2'});
-    const c3 = await models.code.create({iv: 'c3', em: 'c3'});
-    const c4 = await models.code.create({iv: 'c4', em: 'c4'});
-    const t1 = await models.tag.create({userId: 1, codeId: 1});
-    const t2 = await u1.createTag({codeId: 2});
-    const t3 = await u1.createTag({codeId: 3});
-    const n1 = await u1.createNote({codeId: 1});
-    const n2 = await u1.createNote({codeId: 2});
-    const n3 = await u1.createNote({codeId: 3});
-    const n4 = await u2.createNote({codeId: 4});
-    await n1.addTags([t1, t2]);
-    await n2.addTags([t3, t1]);
+    const u1 = await models.user.create({email: 'test@test.com', password: 'test'});
+    const k1 = await u1.createAesKey({
+        typeId: 1,
+        iterations: 2304427,
+        salt: 'SKBgR4j28GQdJ5vojaA9MQ'
+    });
+    const c1 = await k1.createCode({
+        userId: u1.id,
+        iv: 'iyh7zPoLqM3wA0Cm',
+        em: '8I54aQvyNJ2zkFTdVauHeq/lAIkLxwqzv9IcnpQeadiEbpxmHHKwNAZzCF/s/yqT'
+    });
+    const k2 = await u1.createAesKey({typeId: 2, codeId: c1.id});
+    u1.update({unlockAesKeyId: k1.id, mainAesKeyId: k2.id});
+    console.log('user', u1.toJSON());
+    console.log('unlock key', k1.toJSON());
+    console.log('main key code', c1.toJSON());
+    console.log('main key', k2.toJSON());
+    //await k1.destroy();
+
+    const c2 = await u1.createCode({
+        aesKeyId: k2.id,
+        iv: '2222222222222222',
+        em: '2222222222222222222222222222222222222222222222222222222222222222'
+    });
+    const n1 = await u1.createNote({codeId: c2.id});
+    const n2 = await u1.createNote({codeId: c2.id});
+    //await n1.destroy();
+    /*await models.note.destroy({
+        where: {id: [n1.id, n2.id]}
+    }); /**/
+
+    const c3 = await u1.createCode({
+        aesKeyId: k2.id,
+        iv: '3333333333333333',
+        em: '3333333333333333333333333333333333333333333333333333333333333333'
+    });
+    const t1 = await u1.createTag({codeId: c3.id});
+
+    const r1 = await u1.createRefreshToken({
+        data: 'random string',
+        expireAt: new Date()
+    });
+
+    /* const [dump] = await sequelize.query('SELECT * FROM sqlite_master ORDER BY type, name', {raw: true});
+    dump.forEach(({sql}) => {
+        if ( sql ) {
+            console.log(sql);
+        }
+    }); */
+
+
+    // const u2 = await models.user.create({email: 'test2@test.com', password: 'test2'});
+    // const c2 = await models.code.create({iv: 'd2', em: 'd2'});
+    // const c3 = await models.code.create({iv: 'c3', em: 'c3'});
+    // const c4 = await models.code.create({iv: 'c4', em: 'c4'});
+    // const t1 = await models.tag.create({userId: 1, codeId: 1});
+    // const t2 = await u1.createTag({codeId: 2});
+    // const t3 = await u1.createTag({codeId: 3});
+    // const n1 = await u1.createNote({codeId: 1});
+    // const n2 = await u1.createNote({codeId: 2});
+    // const n3 = await u1.createNote({codeId: 3});
+    // const n4 = await u2.createNote({codeId: 4});
+    // await n1.addTags([t1, t2]);
+    // await n2.addTags([t3, t1]);
     //await n1.removeTags([t2]);
 
     //console.log(await models.aesKey.findAll());

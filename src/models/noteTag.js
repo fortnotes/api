@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 
+
 export default sequelize => {
     class NoteTag extends Sequelize.Model {
         // note to tag list:

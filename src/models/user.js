@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 
+
 export default sequelize => {
     class User extends Sequelize.Model {
         getJwtData () {
@@ -20,11 +21,21 @@ export default sequelize => {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            aesKeyId: {
-                type: Sequelize.INTEGER
+            unlockAesKeyId: {
+                type: Sequelize.INTEGER,
+                allowNull: true
             },
-            ecKeyId: {
+            mainAesKeyId: {
+                type: Sequelize.INTEGER,
+                allowNull: true
+            },
+            /* ecKeyId: {
                 type: Sequelize.INTEGER
+            }, */
+            isActive: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: true
             }
         },
         {

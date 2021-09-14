@@ -1,14 +1,18 @@
 import Sequelize from 'sequelize';
 
+
 export default sequelize => {
     class Code extends Sequelize.Model {}
 
     Code.init(
         {
+            userId: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
             aesKeyId: {
                 type: Sequelize.INTEGER,
-                // key itself is encrypted without keyId
-                allowNull: true
+                allowNull: false
             },
             iv: {
                 type: Sequelize.STRING,
@@ -17,8 +21,11 @@ export default sequelize => {
             em: {
                 type: Sequelize.TEXT,
                 allowNull: false,
+                // no need to repeat this for for `iv` field
+                // as they both should be set at the same time
                 set ( value ) {
                     this.setDataValue('em', value);
+                    // calculate total data size
                     this.setDataValue('size', this.iv.length + value.length);
                 }
             },

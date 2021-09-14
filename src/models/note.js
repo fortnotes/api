@@ -1,5 +1,8 @@
 import Sequelize from 'sequelize';
 
+import hooks from '../hooks/code.js';
+
+
 export default sequelize => {
     class Note extends Sequelize.Model {}
 
@@ -12,6 +15,11 @@ export default sequelize => {
             codeId: {
                 type: Sequelize.INTEGER,
                 allowNull: false
+            },
+            isActive: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: true
             }
         },
         {
@@ -33,7 +41,8 @@ export default sequelize => {
                 {
                     fields: ['userId']
                 }
-            ]
+            ],
+            hooks
         }
     );
 
