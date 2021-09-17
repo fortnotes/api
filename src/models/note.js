@@ -20,6 +20,9 @@ export default sequelize => {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: true
+            },
+            viewedAt: {
+                type: Sequelize.DATE
             }
         },
         {
