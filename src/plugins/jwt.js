@@ -5,7 +5,7 @@ import fastifyJwt from 'fastify-jwt';
 import config from '../config.js';
 
 
-const cookiePath = '/graphql';
+const cookiePath = config.graphql.path;
 
 
 export default fastifyPlugin(async app => {
