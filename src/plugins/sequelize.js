@@ -37,12 +37,8 @@ export default fastifyPlugin(async app => {
         model.default(sequelize);
     }));
 
-    try {
         await sequelize.authenticate();
         app.log.info('sequelize: connection has been established successfully');
-    } catch ( error ) {
-        app.log.error(error, 'sequelize: unable to connect to the database!');
-    }
 
     const {models} = sequelize;
 
