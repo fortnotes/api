@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize';
 
+import {USER} from '../constants/userTypes.js';
+
 
 export default sequelize => {
     class User extends Sequelize.Model {
@@ -12,6 +14,11 @@ export default sequelize => {
 
     User.init(
         {
+            typeId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: USER
+            },
             email: {
                 type: Sequelize.STRING,
                 allowNull: false,
