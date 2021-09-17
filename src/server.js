@@ -120,6 +120,7 @@ const stop = async () => {
 };
 
 export default {
+    app,
     config,
     start,
     stop
