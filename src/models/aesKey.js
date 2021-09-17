@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize';
 
+import {GENERAL} from '../constants/aesKeyTypes.js';
+
 
 export default sequelize => {
     class AesKey extends Sequelize.Model {}
@@ -12,7 +14,8 @@ export default sequelize => {
             },
             typeId: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                allowNull: false,
+                defaultValue: GENERAL
             },
             codeId: {
                 type: Sequelize.INTEGER,
