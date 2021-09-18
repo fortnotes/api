@@ -1,27 +1,33 @@
 module.exports = {
-    // base rules
-    // extends: require.resolve('cjs-eslint'),
-    extends: 'airbnb-base',
+    extends: [
+        // https://www.npmjs.com/package/eslint-config-airbnb-base
+        'airbnb-base',
+
+        // https://github.com/import-js/eslint-plugin-import
+        'plugin:import/recommended'
+    ],
 
     parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module'
+        ecmaVersion: 2020
     },
 
     rules: {
-        indent: ['error', 4, {SwitchCase: 1}],
-        'comma-dangle': ['error', 'never'],
-        'object-curly-spacing': ['error', 'never'],
-        'spaced-comment': 'off',
+        // base
         'arrow-parens': ['warn', 'as-needed'],
+        'comma-dangle': ['error', 'never'],
+        'max-len': ['warn', {code: 120}],
         'no-console': 'off',
-        'space-in-parens': 'off',
-        'no-shadow': ['error', {builtinGlobals: false, hoist: 'all', allow: ['error']}],
         'no-multiple-empty-lines': ['error', {max: 2, maxEOF: 0, maxBOF: 0}],
-        'space-before-function-paren': ['error', {anonymous: 'always', named: 'always'}],
+        'no-shadow': ['error', {builtinGlobals: false, hoist: 'all', allow: ['error']}],
         'no-unused-expressions': ['error', {allowShortCircuit: true}],
+        'object-curly-spacing': ['error', 'never'],
+        'space-before-function-paren': ['error', {anonymous: 'always', named: 'always'}],
+        'space-in-parens': 'off',
+        'spaced-comment': 'off',
+        indent: ['error', 4, {SwitchCase: 1}],
+
+        // plugins
         'import/extensions': ['warn', 'ignorePackages'],
-        'max-len': ['warn', {code: 120}]
-        //'require-await': 0
+        'import/no-extraneous-dependencies': ['error', {devDependencies: true}]
     }
 };

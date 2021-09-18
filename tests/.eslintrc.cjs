@@ -1,21 +1,20 @@
 module.exports = {
-    'extends': [
+    extends: [
         require.resolve('../.eslintrc.cjs'),
 
         // https://github.com/jest-community/eslint-plugin-jest
         'plugin:jest/all'
     ],
+
     env: {
         jest: true
     },
 
     rules: {
-        'quote-props': ['error', 'as-needed', {keywords: true, unnecessary: false}],
-        'no-shadow': ['error', {allow: ['done']}],
+        // base
         'max-lines-per-function': ['error', {max: 300}],
-        'no-unused-expressions': ['off'],
-        'strict': ['off'],
 
+        // plugins
         'jest/prefer-expect-assertions': ['off']
     }
 };
