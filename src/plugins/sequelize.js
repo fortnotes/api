@@ -1,25 +1,14 @@
 import Sequelize from 'sequelize';
 import fastifyPlugin from 'fastify-plugin';
 
-import {writeFile} from 'fs';
-import sequelizeErd from 'sequelize-erd';
-
 import config from '../config.js';
+
 
 const forceSync = true;
 
-const sequelize = new Sequelize(config.db);
-
-const generateErd = ( db, app ) => {
-    sequelizeErd({source: db, arrowSize: 1.5}).then(svg => writeFile(
-        './erd.svg',
-        svg,
-        () => app.log.info('sequelize: erd.svg is saved')
-    ));
-};
-
 
 export default fastifyPlugin(async app => {
+    const sequelize = new Sequelize(config.db);
     const modelNames = [
         'aesKey',
         'code',
@@ -58,8 +47,6 @@ export default fastifyPlugin(async app => {
     models.note.hasMany(models.noteRevision);
     models.note.belongsToMany(models.tag, {through: models.noteTag});
     models.tag.belongsToMany(models.note, {through: models.noteTag});
-
-    generateErd(sequelize, app);
 
     await sequelize.sync({force: forceSync});
 
