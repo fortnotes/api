@@ -1,22 +1,44 @@
 import Sequelize from 'sequelize';
 
+import {GENERAL} from '../constants/aesKeyTypes.js';
+
+
 export default sequelize => {
     class AesKey extends Sequelize.Model {}
 
     AesKey.init(
         {
-            iterations: {
+            userId: {
                 type: Sequelize.INTEGER,
                 allowNull: false
             },
-            salt: {
-                type: Sequelize.STRING,
-                allowNull: false
+            typeId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: GENERAL
             },
             codeId: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                allowNull: true
+            },
+            iterations: {
+                type: Sequelize.INTEGER,
+                allowNull: true
+            },
+            salt: {
+                type: Sequelize.STRING,
+                allowNull: true
+            },
+            isActive: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: true
             }
+            /* usages: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 0
+            } */
         },
         {
             sequelize,

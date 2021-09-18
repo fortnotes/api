@@ -1,5 +1,8 @@
 import Sequelize from 'sequelize';
 
+import {USER} from '../constants/userTypes.js';
+
+
 export default sequelize => {
     class User extends Sequelize.Model {
         getJwtData () {
@@ -11,6 +14,11 @@ export default sequelize => {
 
     User.init(
         {
+            typeId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: USER
+            },
             email: {
                 type: Sequelize.STRING,
                 allowNull: false,
@@ -20,11 +28,21 @@ export default sequelize => {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            aesKeyId: {
-                type: Sequelize.INTEGER
+            unlockAesKeyId: {
+                type: Sequelize.INTEGER,
+                allowNull: true
             },
-            ecKeyId: {
+            mainAesKeyId: {
+                type: Sequelize.INTEGER,
+                allowNull: true
+            },
+            /* ecKeyId: {
                 type: Sequelize.INTEGER
+            }, */
+            isActive: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: true
             }
         },
         {

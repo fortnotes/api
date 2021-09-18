@@ -21,7 +21,8 @@
         "start": "NODE_ENV=production node ./src/index.js",
         "lint": "eslint ./src ./tests",
         "jest": "NODE_OPTIONS='--experimental-vm-modules --require dotenv/config' npx jest --config tests/config.js",
-        "test": "npm run lint && npm run jest"
+        "test": "npm run lint && npm run jest",
+        "erd": "node src/utils/erd.js"
     },
     "dependencies": {
         "apollo-server-fastify": "^3.3.0",

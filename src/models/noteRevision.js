@@ -1,5 +1,8 @@
 import Sequelize from 'sequelize';
 
+import hooks from '../hooks/code.js';
+
+
 export default sequelize => {
     class NoteRevision extends Sequelize.Model {}
 
@@ -34,7 +37,8 @@ export default sequelize => {
                 {
                     fields: ['noteId']
                 }
-            ]
+            ],
+            hooks
         }
     );
 

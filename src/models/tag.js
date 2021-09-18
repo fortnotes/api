@@ -1,5 +1,8 @@
 import Sequelize from 'sequelize';
 
+import hooks from '../hooks/code.js';
+
+
 export default sequelize => {
     class Tag extends Sequelize.Model {}
 
@@ -42,7 +45,8 @@ export default sequelize => {
                 {
                     fields: ['userId']
                 }
-            ]
+            ],
+            hooks
         }
     );
 
