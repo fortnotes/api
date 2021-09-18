@@ -76,6 +76,13 @@ const start = async () => {
         };
     };
 
+    const formatError = exception => {
+        app.log.error(exception, 'GraphQL error');
+
+        return exception;
+    };
+
+
     if ( config.logLevel ) {
         app.addHook('preHandler', async request => {
             if ( request.body ) {
@@ -88,7 +95,8 @@ const start = async () => {
         debug: !!config.logLevel,
         typeDefs,
         resolvers,
-        context: prepareContext
+        context: prepareContext,
+        formatError
     });
 
     await apolloServer.start();

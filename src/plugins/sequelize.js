@@ -1,75 +1,114 @@
+/* eslint-disable no-unused-vars */
 import Sequelize from 'sequelize';
 import fastifyPlugin from 'fastify-plugin';
+import {readdirSync} from 'fs';
+import path from 'path';
 
 import config from '../config.js';
 
 
 const forceSync = true;
+const modelsPath = path.join(process.cwd(), 'src', 'models');
+const modelFileNames = readdirSync(modelsPath).map(fileName => path.join(modelsPath, fileName));
+
+const setAssociations = models => {
+    const {
+        aesKey,
+        code,
+        ecKey,
+        note,
+        noteRevision,
+        noteTag,
+        refreshToken,
+        tag,
+        user
+    } = models;
+
+    aesKey.hasMany(code);
+    aesKey.belongsTo(code, {foreignKey: 'codeId', as: 'code', constraints: false});
+    code.belongsTo(aesKey);
+
+    user.hasMany(code);
+    code.belongsTo(user);
+
+    user.hasMany(aesKey);
+    user.belongsTo(aesKey, {foreignKey: 'unlockAesKeyId', as: 'unlockAesKey', constraints: false});
+    user.belongsTo(aesKey, {foreignKey: 'mainAesKeyId', as: 'mainAesKey', constraints: false});
+    aesKey.belongsTo(user);
+
+    user.hasMany(ecKey);
+    ecKey.belongsTo(user);
+
+    user.hasMany(note);
+    note.belongsTo(user);
+
+    user.hasMany(refreshToken);
+    refreshToken.belongsTo(user);
+
+    user.hasMany(tag);
+    tag.belongsTo(user);
+
+    code.hasOne(note, {constraints: false});
+    note.belongsTo(code, {constraints: false});
+
+    code.hasOne(tag, {constraints: false});
+    tag.belongsTo(code, {constraints: false});
+
+    code.hasOne(ecKey, {constraints: false});
+    ecKey.belongsTo(code, {constraints: false});
+
+    code.hasOne(noteRevision, {constraints: false});
+    noteRevision.belongsTo(code, {constraints: false});
+
+    note.hasMany(noteRevision);
+    noteRevision.belongsTo(note);
+
+    note.belongsToMany(tag, {through: noteTag});
+    tag.belongsToMany(note, {through: noteTag});
+};
 
 
 export default fastifyPlugin(async app => {
     const sequelize = new Sequelize(config.db);
-    const modelNames = [
-        'aesKey',
-        'code',
-        'ecKey',
-        'note',
-        'noteRevision',
-        'noteTag',
-        'refreshToken',
-        'tag',
-        'user'
-    ];
 
-    await Promise.all(modelNames.map(async name => {
-        const model = await import(`../models/${name}.js`);
-        model.default(sequelize);
+    // load and init all db models
+    await Promise.all(modelFileNames.map(async name => {
+        (await import(name)).default(sequelize);
     }));
 
-        await sequelize.authenticate();
-        app.log.info('sequelize: connection has been established successfully');
+    await sequelize.authenticate();
+    app.log.info('sequelize: connection has been established successfully');
 
-    const {models} = sequelize;
-
-    models.aesKey.hasMany(models.code);
-    models.user.hasMany(models.code);
-    models.user.hasMany(models.aesKey);
-    models.user.hasMany(models.ecKey);
-    models.user.hasMany(models.note);
-    models.user.hasMany(models.refreshToken);
-    models.user.hasMany(models.tag);
-
-    models.code.hasOne(models.note, {constraints: false});
-    models.code.hasOne(models.tag, {constraints: false});
-    models.code.hasOne(models.ecKey, {constraints: false});
-    models.code.hasOne(models.noteRevision, {constraints: false});
-
-    models.note.hasMany(models.noteRevision);
-    models.note.belongsToMany(models.tag, {through: models.noteTag});
-    models.tag.belongsToMany(models.note, {through: models.noteTag});
+    setAssociations(sequelize.models);
 
     await sequelize.sync({force: forceSync});
 
     app.decorate('db', sequelize);
 
 
-    const u1 = await models.user.create({email: 'test@test.com', password: 'test'});
+    const u1 = await sequelize.models.user.create({email: 'test@test.com', password: 'test'});
     const k1 = await u1.createAesKey({
         typeId: 1,
         iterations: 2304427,
         salt: 'SKBgR4j28GQdJ5vojaA9MQ'
     });
+    await k1.getUser();
+    await k1.getCode(); //<-- doesn't work, need more associations
     const c1 = await k1.createCode({
         userId: u1.id,
         iv: 'iyh7zPoLqM3wA0Cm',
         em: '8I54aQvyNJ2zkFTdVauHeq/lAIkLxwqzv9IcnpQeadiEbpxmHHKwNAZzCF/s/yqT'
     });
+    await c1.getUser();
+    await c1.getAesKey();
     const k2 = await u1.createAesKey({typeId: 2, codeId: c1.id});
     u1.update({unlockAesKeyId: k1.id, mainAesKeyId: k2.id});
-    console.log('user', u1.toJSON());
-    console.log('unlock key', k1.toJSON());
-    console.log('main key code', c1.toJSON());
-    console.log('main key', k2.toJSON());
+    await u1.getUnlockAesKey(); //<-- doesn't work, need more associations
+    await u1.getMainAesKey(); //<-- doesn't work, need more associations
+    // console.log('user', u1.toJSON());
+    // console.log('unlock key', k1.toJSON());
+    // console.log('main key code', c1.toJSON());
+    // console.log('main key', k2.toJSON());
     //await k1.destroy();
 
     const c2 = await u1.createCode({
@@ -79,6 +118,9 @@ export default fastifyPlugin(async app => {
     });
     const n1 = await u1.createNote({codeId: c2.id});
     const n2 = await u1.createNote({codeId: c2.id});
+    await n2.getUser();
+    await n2.getCode();
+    await c2.getNote();
     //await n1.destroy();
     /*await models.note.destroy({
         where: {id: [n1.id, n2.id]}
@@ -90,7 +132,9 @@ export default fastifyPlugin(async app => {
         em: '3333333333333333333333333333333333333333333333333333333333333333'
     });
     const t1 = await u1.createTag({codeId: c3.id});
-
+    await t1.getCode();
+    await t1.getUser();
+    await c3.getTag();
     const r1 = await u1.createRefreshToken({
         data: 'random string',
         expireAt: new Date()

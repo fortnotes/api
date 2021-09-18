@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+/* eslint-disable */
 import cookie from 'cookie';
 
 import config from './config.js';

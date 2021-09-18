@@ -6,10 +6,12 @@ const svgFileName = './erd.svg';
 const app = fastify();
 
 
-await app.register(import('../plugins/sequelize.js'));
+(async () => {
+    await app.register(import('../plugins/sequelize.js'));
 
-await writeFile(
-    svgFileName,
-    await sequelizeErd({source: app.db, arrowSize: 1.5})
-);
-console.log(`${svgFileName} is saved`);
+    await writeFile(
+        svgFileName,
+        await sequelizeErd({source: app.db, arrowSize: 1.5})
+    );
+    console.log(`${svgFileName} is saved`);
+})();
