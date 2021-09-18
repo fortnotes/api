@@ -1,79 +1,74 @@
-const errors = {
-    AUTHORIZATION_REQUIRED: {
-        code: 401,
-        body: {
-            message: 'Authorization header required to perform this action.'
-        }
-    },
+/* eslint-disable max-classes-per-file */
 
-    AUTHORIZATION_WRONG_CREDENTIALS: {
-        code: 400,
-        body: {
-            message: 'Wrong user credentials.'
-        }
-    },
+// https://www.apollographql.com/docs/apollo-server/data/errors/
 
-    /* REFRESH_TOKEN_FAILURE: {
-        code: 400,
-        body: {
-            message: 'Token expired.'
-        }
-    }, */
+import {
+    ApolloError,
+    AuthenticationError as ApolloAuthenticationError,
+    ForbiddenError as ApolloForbiddenError,
+    ValidationError as ApolloValidationError
+} from 'apollo-server-fastify';
 
-    ACCESS_DENIED: {
-        code: 404,
-        body: {
-            message: 'Not enough permissions to perform this action.'
-        }
-    },
 
-    BAD_REQUEST: {
-        code: 400,
-        body: {
-            message: 'Wrong parameters.'
-        }
-    },
-
-    INVALID_REQUEST_DATA: {
-        code: 400,
-        body: {
-            message: 'Parameters validation failed.'
-        }
-    },
-
-    DUPLICATE_ENTRY: {
-        code: 400,
-        body: {
-            message: 'Entry with same unique field already exists.'
-        }
-    },
-
-    DATABASE_READING_FAILURE: {
-        code: 400,
-        body: {
-            message: 'Error reading data from database.'
-        }
-    },
-
-    DATABASE_WRITING_FAILURE: {
-        code: 400,
-        body: {
-            message: 'Error writing data to database.'
-        }
-    },
-
-    INTERNAL_SERVER_ERROR: {
-        code: 500,
-        body: {
-            message: 'Oops. Server encountered an unexpected conditions.'
-        }
+/* export class GeneralError extends ApolloError {
+    constructor ( message = 'General error' ) {
+        super(message, 'GENERAL_ERROR');
+        this.name = 'GeneralError';
     }
-};
+} */
 
+export class AuthenticationError extends ApolloAuthenticationError {
+    constructor ( message = 'Not authorized' ) {
+        super(message);
+        this.name = 'AuthenticationError';
+    }
+}
 
-Object.keys(errors).forEach(code => {
-    errors[code].body.code = code;
-});
+export class ForbiddenError extends ApolloForbiddenError {
+    constructor ( message = 'Forbidden' ) {
+        super(message);
+        this.name = 'ForbiddenError';
+    }
+}
 
+export class ValidationError extends ApolloValidationError {
+    constructor ( message = 'Validation error' ) {
+        super(message);
+        this.name = 'ValidationError';
+    }
+}
 
-export default Object.freeze(errors);
+export class NotFoundError extends ApolloError {
+    constructor ( message = 'Entity not found' ) {
+        super(message, 'NOT_FOUND_ERROR');
+        this.name = 'NotFoundError';
+    }
+}
+
+export class UserNotFoundError extends NotFoundError {
+    constructor () {
+        super('User not found');
+        this.name = 'UserNotFoundError';
+    }
+}
+
+export class NoteNotFoundError extends NotFoundError {
+    constructor () {
+        super('Note not found');
+        this.name = 'NoteNotFoundError';
+    }
+}
+
+export class CodeNotFoundError extends NotFoundError {
+    constructor () {
+        super('Code not found');
+        this.name = 'CodeNotFoundError';
+    }
+}
+
+export class TagNotFoundError extends NotFoundError {
+    constructor () {
+        super('Tag not found');
+        this.name = 'TagNotFoundError';
+    }
+}

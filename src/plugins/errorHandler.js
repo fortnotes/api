@@ -1,18 +1,19 @@
-import Sequelize from 'sequelize';
+//import Sequelize from 'sequelize';
 import fastifyPlugin from 'fastify-plugin';
 
-import errors from '../constants/errors.js';
+//import errors from '../constants/errors.js';
 
 //const Exceptions = require('../exceptions');
 
 
+// ???
 export default fastifyPlugin(async app => {
-    app.setErrorHandler(async ( exception, request, reply ) => {
-        let error;
+    app.setErrorHandler(async ( exception/* , request, reply */ ) => {
+        //let error;
 
-        app.log.error(exception);
+        app.log.error(exception, 'fastify error');
 
-        switch ( exception.constructor ) {
+        /* switch ( exception.constructor ) {
             case Sequelize.ValidationError:
                 error = errors.INVALID_REQUEST_DATA;
                 break;
@@ -50,8 +51,8 @@ export default fastifyPlugin(async app => {
                 }
 
                 break;
-        }
+        } /**/
 
-        reply.sendError(error);
+        //reply.sendError(error);
     });
 });
