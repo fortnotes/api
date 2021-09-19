@@ -9,7 +9,7 @@
 
 ## Getting Started ##
 
-[Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.com/) should be installed beforehand.
+[Node.js](http://nodejs.org/) (at least `v14`) and [NPM](https://www.npmjs.com/) should be installed beforehand.
 Please follow the official [instruction](http://nodejs.org/download/).
 
 
@@ -93,7 +93,7 @@ npm test
 ------------------------|-------------
  FORTNOTES_API_ENDPOINT | GraphQL API endpoint to test
 
-Tests are also run on [GitHub Actions](https://github.com/fortnotes/api/actions) for node versions `12.x`, `14.x` and `16.x`.
+Tests are also run on [GitHub Actions](https://github.com/fortnotes/api/actions) for node versions `14.x` and `16.x`.
 
 
 ## License ##
