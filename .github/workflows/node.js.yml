@@ -34,4 +34,6 @@ jobs:
 
             - run: npm ci
             - run: npm run lint
+              env:
+                  DEBUG: "*"
             #- run: npm run jest
