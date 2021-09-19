@@ -10,19 +10,25 @@ on:
 
 jobs:
     build:
+        # https://github.com/actions/virtual-environments
         runs-on: ubuntu-latest
 
         strategy:
             matrix:
                 # https://nodejs.org/en/about/releases/
-                node-version: [12.x, 14.x, 16.x]
+                #node-version: [12.x, 14.x, 16.x]
+                node-version: [lts/*]
 
         steps:
+            # https://github.com/actions/checkout
             - uses: actions/checkout@v2
+
+            # https://github.com/actions/setup-node
             - name: use node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v2
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: npm
+
             - run: npm ci
             - run: npm test
