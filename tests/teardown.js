@@ -1,6 +1,6 @@
-import server from '../src/server.js';
+//import server from '../src/Server.js';
 
 
 export default async () => {
-    await server.stop();
+    //await server.stop();
 };
