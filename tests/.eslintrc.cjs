@@ -15,8 +15,9 @@ module.exports = {
         'max-lines-per-function': ['error', {max: 300}],
 
         // plugins
-        'jest/prefer-expect-assertions': ['off'],
+        'jest/no-commented-out-tests': ['warn'],
         'jest/no-disabled-tests': ['warn'],
-        'jest/no-commented-out-tests': ['warn']
+        'jest/no-hooks': ['off'],
+        'jest/prefer-expect-assertions': ['off']
     }
 };
