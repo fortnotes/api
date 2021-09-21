@@ -2,7 +2,7 @@
 
 export default {
     verbose: true,
-    testMatch: ['**/tests/specs/*.js'],
+    testMatch: ['**/tests/specs/db.js'],
     globalSetup: '<rootDir>/setup.js',
     globalTeardown: '<rootDir>/teardown.js',
     transform: {},
