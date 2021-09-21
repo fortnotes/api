@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import hooks from '../hooks/code.js';
 
 
-export default sequelize => {
+export default ( {db} ) => {
     class Tag extends Sequelize.Model {}
 
     Tag.init(
@@ -27,26 +27,14 @@ export default sequelize => {
             }
         },
         {
-            sequelize,
+            sequelize: db,
             modelName: 'tag',
-            /* defaultScope: {
-                attributes: {
-                    exclude: ['userId', 'codeId']
-                }
-            },
-            scopes: {
-                full: {
-                    attributes: {
-                        exclude: []
-                    }
-                }
-            }, */
+            hooks,
             indexes: [
                 {
                     fields: ['userId']
                 }
-            ],
-            hooks
+            ]
         }
     );
 
