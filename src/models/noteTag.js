@@ -1,7 +1,9 @@
 import Sequelize from 'sequelize';
 
 
-export default sequelize => {
+export default ( {db} ) => {
+    const {models} = db;
+
     class NoteTag extends Sequelize.Model {
         // note to tag list:
         // { '1': [ 1, 2 ], '2': [ 3 ] }
@@ -37,7 +39,7 @@ export default sequelize => {
             }
         },
         {
-            sequelize,
+            sequelize: db,
             modelName: 'noteTag',
             updatedAt: false,
             indexes: [
@@ -51,16 +53,17 @@ export default sequelize => {
         }
     );
 
+    //TODO: add beforeCreate and transaction
     NoteTag.beforeBulkCreate(async links => {
         const tagIds = links.map(link => link.tagId);
 
-        await sequelize.models.tag.increment('usages', {
+        await models.tag.increment('usages', {
             where: {id: tagIds}
         });
     });
 
     NoteTag.beforeBulkDestroy(async options => {
-        await sequelize.models.tag.decrement('usages', {
+        await models.tag.decrement('usages', {
             where: {id: options.where.tagId}
         });
     });

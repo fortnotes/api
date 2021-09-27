@@ -5,9 +5,7 @@ name: Node.js CI
 # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
     push:
-        branches: [main]
     pull_request:
-        branches: [main]
     schedule:
         - cron: "0 0 * * *"
 
@@ -36,6 +34,4 @@ jobs:
               run: npm ci
 
             - run: npm run lint
-              env:
-                  DEBUG: "*"
-            #- run: npm run jest
+            - run: npm run jest

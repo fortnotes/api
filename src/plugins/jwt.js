@@ -1,14 +1,12 @@
 import fastifyPlugin from 'fastify-plugin';
 import fastifyJwt from 'fastify-jwt';
 
-//import errors from '../constants/errors.js';
-import config from '../config.js';
-
-
-const cookiePath = config.graphql.path;
-
 
 export default fastifyPlugin(async app => {
+    const {config} = app;
+
+    const cookiePath = config.graphql.path;
+
     const setAccessToken = ( reply, user ) => {
         const token = app.jwt.sign(user, {
             expiresIn: config.jwt.accessTokenExpireTime,

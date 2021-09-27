@@ -1,16 +1,13 @@
 import Sequelize from 'sequelize';
 import crypto from 'crypto';
 
-import config from '../config.js';
 
+export default ( {config, db} ) => {
+    const generateTokenData = () => ({
+        expireAt: new Date(Date.now() + config.jwt.refreshTokenExpireTime * 1000),
+        data: crypto.randomBytes(config.jwt.refreshTokenSize).toString('base64')
+    });
 
-const generateTokenData = () => ({
-    expireAt: new Date(Date.now() + config.jwt.refreshTokenExpireTime * 1000),
-    data: crypto.randomBytes(config.jwt.refreshTokenSize).toString('base64')
-});
-
-
-export default sequelize => {
     class RefreshToken extends Sequelize.Model {
         static generate ( details = {} ) {
             return RefreshToken.create({
@@ -79,20 +76,8 @@ export default sequelize => {
             }
         },
         {
-            sequelize,
+            sequelize: db,
             modelName: 'refreshToken',
-            /* defaultScope: {
-                attributes: {
-                    exclude: ['createdAt']
-                }
-            },
-            scopes: {
-                full: {
-                    attributes: {
-                        exclude: []
-                    }
-                }
-            }, */
             indexes: [
                 {
                     fields: ['userId']

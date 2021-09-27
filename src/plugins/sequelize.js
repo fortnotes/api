@@ -4,8 +4,6 @@ import fastifyPlugin from 'fastify-plugin';
 import {readdirSync} from 'fs';
 import path from 'path';
 
-import config from '../config.js';
-
 
 const forceSync = true;
 const modelsPath = path.join(process.cwd(), 'src', 'models');
@@ -69,24 +67,28 @@ const setAssociations = models => {
 
 
 export default fastifyPlugin(async app => {
-    const sequelize = new Sequelize(config.db);
+    const {config} = app;
+
+    const db = new Sequelize(config.db);
+
+    app.decorate('db', db);
 
     // load and init all db models
     await Promise.all(modelFileNames.map(async name => {
-        (await import(name)).default(sequelize);
+        (await import(name)).default(app);
     }));
 
-    await sequelize.authenticate();
+    await db.authenticate();
     app.log.info('sequelize: connection has been established successfully');
 
-    setAssociations(sequelize.models);
+    setAssociations(db.models);
 
-    await sequelize.sync({force: forceSync});
+    await db.sync({force: forceSync});
 
-    app.decorate('db', sequelize);
+    return;
 
-
-    const u1 = await sequelize.models.user.create({email: 'test@test.com', password: 'test'});
+    /* eslint-disable no-unreachable */
+    const u1 = await db.models.user.create({email: 'test@test.com', password: 'test'});
     const k1 = await u1.createAesKey({
         typeId: 1,
         iterations: 2304427,

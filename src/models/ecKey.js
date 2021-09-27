@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import hooks from '../hooks/code.js';
 
 
-export default sequelize => {
+export default ( {db} ) => {
     class EcKey extends Sequelize.Model {}
 
     EcKey.init(
@@ -27,9 +27,14 @@ export default sequelize => {
             }
         },
         {
-            sequelize,
+            sequelize: db,
             modelName: 'ecKey',
-            hooks
+            hooks,
+            indexes: [
+                {
+                    fields: ['userId']
+                }
+            ]
         }
     );
 

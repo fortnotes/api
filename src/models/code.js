@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 
 
-export default sequelize => {
+export default ( {db} ) => {
     class Code extends Sequelize.Model {}
 
     Code.init(
@@ -35,20 +35,13 @@ export default sequelize => {
             }
         },
         {
-            sequelize,
-            modelName: 'code'/* ,
-            defaultScope: {
-                attributes: {
-                    exclude: ['id', 'aesKeyId']
+            sequelize: db,
+            modelName: 'code',
+            indexes: [
+                {
+                    fields: ['userId']
                 }
-            },
-            scopes: {
-                full: {
-                    attributes: {
-                        exclude: []
-                    }
-                }
-            } */
+            ]
         }
     );
 

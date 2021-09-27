@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import {GENERAL} from '../constants/aesKeyTypes.js';
 
 
-export default sequelize => {
+export default ( {db} ) => {
     class AesKey extends Sequelize.Model {}
 
     AesKey.init(
@@ -41,20 +41,13 @@ export default sequelize => {
             } */
         },
         {
-            sequelize,
-            modelName: 'aesKey'/* ,
-            defaultScope: {
-                attributes: {
-                    exclude: ['id', 'codeId']
+            sequelize: db,
+            modelName: 'aesKey',
+            indexes: [
+                {
+                    fields: ['userId']
                 }
-            },
-            scopes: {
-                full: {
-                    attributes: {
-                        exclude: []
-                    }
-                }
-            } */
+            ]
         }
     );
 

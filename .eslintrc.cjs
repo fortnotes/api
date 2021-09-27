@@ -20,6 +20,7 @@ module.exports = {
         'no-multiple-empty-lines': ['error', {max: 2, maxEOF: 0, maxBOF: 0}],
         'no-shadow': ['error', {builtinGlobals: false, hoist: 'all', allow: ['error']}],
         'no-unused-expressions': ['error', {allowShortCircuit: true}],
+        'no-use-before-define': 'off',
         'object-curly-spacing': ['error', 'never'],
         'space-before-function-paren': ['error', {anonymous: 'always', named: 'always'}],
         'space-in-parens': 'off',

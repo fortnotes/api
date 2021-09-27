@@ -1,8 +1,7 @@
-import server from './server.js';
+import Server from './Server.js';
+import config from './config.js';
 
+
+const server = new Server(config);
 
 server.start();
-
-/*setTimeout(() => {
-    server.stop();
-}, 5000);/**/

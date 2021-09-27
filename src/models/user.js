@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import {USER} from '../constants/userTypes.js';
 
 
-export default sequelize => {
+export default ( {db} ) => {
     class User extends Sequelize.Model {
         getJwtData () {
             return {
@@ -46,21 +46,12 @@ export default sequelize => {
             }
         },
         {
-            sequelize,
+            sequelize: db,
             modelName: 'user',
-            /* defaultScope: {
-                attributes: {
-                    exclude: ['password', 'aesKeyId', 'ecKeyId']
-                }
-            },
-            scopes: {
-                full: {
-                    attributes: {
-                        exclude: []
-                    }
-                }
-            }, */
             indexes: [
+                {
+                    fields: ['typeId']
+                },
                 {
                     fields: ['email']
                 }
