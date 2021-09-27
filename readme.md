@@ -1,6 +1,6 @@
 # FortNotes Server
 
-[![Build Status](https://img.shields.io/travis/fortnotes/api.svg?style=flat-square)](https://travis-ci.org/fortnotes/api)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Ffortnotes%2Fapi%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/fortnotes/api/goto?ref=main)
 [![Dependencies Status](https://img.shields.io/david/fortnotes/api.svg?style=flat-square)](https://david-dm.org/fortnotes/api)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-blue.svg?style=flat-square)](https://gitter.im/DarkPark/FortNotes)
 
@@ -9,7 +9,7 @@
 
 ## Getting Started ##
 
-[Node.js](http://nodejs.org/) and [NPM](https://www.npmjs.com/) should be installed beforehand.
+[Node.js](http://nodejs.org/) (at least `v14`) and [NPM](https://www.npmjs.com/) should be installed beforehand.
 Please follow the official [instruction](http://nodejs.org/download/).
 
 
@@ -93,8 +93,7 @@ npm test
 ------------------------|-------------
  FORTNOTES_API_ENDPOINT | GraphQL API endpoint to test
 
-???
-Tests are also run on [Travis CI](https://travis-ci.org/fortnotes/server) for node versions `0.10.x`, `0.12.x` and `iojs`.
+Tests are also run on [GitHub Actions](https://github.com/fortnotes/api/actions) for node versions `14.x` and `16.x`.
 
 
 ## License ##
