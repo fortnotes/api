@@ -12,7 +12,8 @@ export default ( {db} ) => {
             },
             aesKeyId: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                // aes key is absent for aes key code itself
+                allowNull: true
             },
             iv: {
                 type: Sequelize.STRING,

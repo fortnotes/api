@@ -42,11 +42,13 @@ export default ( {db} ) => {
             },
             aesKeyId: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                // aes key can't be created beforehand
+                allowNull: true
             },
             ecKeyId: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                // aes key can't be created beforehand
+                allowNull: true
             },
             isActive: {
                 type: Sequelize.BOOLEAN,
