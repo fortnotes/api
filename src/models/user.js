@@ -24,21 +24,30 @@ export default ( {db} ) => {
                 allowNull: false,
                 unique: true
             },
-            password: {
+            /* passwordKdfConfigId: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            }, */
+            passwordKdfSalt: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            unlockAesKeyId: {
+            passwordKdfIterations: {
                 type: Sequelize.INTEGER,
-                allowNull: true
+                allowNull: false
             },
-            mainAesKeyId: {
+            passwordHash: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            aesKeyId: {
                 type: Sequelize.INTEGER,
-                allowNull: true
+                allowNull: false
             },
-            /* ecKeyId: {
-                type: Sequelize.INTEGER
-            }, */
+            ecKeyId: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
             isActive: {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,

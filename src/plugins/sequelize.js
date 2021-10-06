@@ -30,9 +30,8 @@ const setAssociations = models => {
     code.belongsTo(user);
 
     user.hasMany(aesKey);
-    user.belongsTo(aesKey, {foreignKey: 'unlockAesKeyId', as: 'unlockAesKey', constraints: false});
-    user.belongsTo(aesKey, {foreignKey: 'mainAesKeyId', as: 'mainAesKey', constraints: false});
     aesKey.belongsTo(user);
+    user.belongsTo(aesKey, {constraints: false});
 
     user.hasMany(ecKey);
     ecKey.belongsTo(user);
