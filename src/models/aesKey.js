@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-import {GENERAL} from '../constants/aesKeyTypes.js';
+//import {GENERAL} from '../constants/aesKeyTypes.js';
 
 
 export default ( {db} ) => {
@@ -12,22 +12,26 @@ export default ( {db} ) => {
                 type: Sequelize.INTEGER,
                 allowNull: false
             },
-            typeId: {
+            /* typeId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 defaultValue: GENERAL
+            }, */
+            /* kdfConfigId: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            }, */
+            kdfSalt: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            kdfIterations: {
+                type: Sequelize.INTEGER,
+                allowNull: false
             },
             codeId: {
                 type: Sequelize.INTEGER,
-                allowNull: true
-            },
-            iterations: {
-                type: Sequelize.INTEGER,
-                allowNull: true
-            },
-            salt: {
-                type: Sequelize.STRING,
-                allowNull: true
+                allowNull: false
             },
             isActive: {
                 type: Sequelize.BOOLEAN,

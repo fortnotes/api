@@ -63,14 +63,14 @@ describe('users', () => {
             const response = await requests.anonymous.call(getLoginMutation({email: '', password: ''}));
 
             expect(requests.anonymous.cookies).toStrictEqual({});
-            expect(response.data.errors[0].extensions.code).toStrictEqual('INTERNAL_SERVER_ERROR');
+            expect(response.data.errors[0].extensions.code).toBe('INTERNAL_SERVER_ERROR');
         });
 
         it.skip('login with wrong credentials - should fail', async () => {
             const response = await requests.anonymous.call(getLoginMutation({email: 'wrong', password: 'wrong'}));
 
             expect(requests.anonymous.cookies).toStrictEqual({});
-            expect(response.data.errors[0].extensions.code).toStrictEqual('INTERNAL_SERVER_ERROR');
+            expect(response.data.errors[0].extensions.code).toBe('INTERNAL_SERVER_ERROR');
         });
 
         it.skip('login admin with good credentials - should pass', async () => {
